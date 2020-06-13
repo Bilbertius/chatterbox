@@ -50,7 +50,7 @@
 
         background: inherit;
         border: none;
-        color: white;
+        color: hsl(146, 100%, 50%);
         font-weight: bolder;
         font-size: 1.2em;
         width: 20%;
@@ -118,6 +118,11 @@
         padding: 1em;
         font-size: 14px;
     }
+
+    #atlarge {
+        display:flex;
+        flex-flow: column nowrap;
+    }
 </style>
 <svelte:head>
     <title>chatterbox</title>
@@ -126,64 +131,54 @@
             rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </svelte:head>
-<svelte:window on:unload={emitUserDisconnect}></svelte:window>
+
+<svelte:window on:unload={emitUserDisconnect}/>
 
 <script>
-    import Heading from '../components/Heading.svelte';
-
     import io from "socket.io-client";
     import { fade } from "svelte/transition";
 
-    let socket = io();
-    let placeholder = "Enter messsage";
-    let greeting = 'You have joined the chat '
-
-
-    let message = '';
+    import Heading from "../components/Heading.svelte";
+    const socket = io();
+    const placeholder = "Type your message here...";
+    const greeting = `You have joined the chat. Use '/nick your_nickname' to set your nickname!`
     let messages = [greeting];
-    let name = "guest";
+    let message = "";
+    let name = `Guest${numUsersConnected}`;
     let numUsersConnected = 0;
-
-    socket.on("message", function(message)  {
-    	messages = messages.concat(message);
-    	updateScroll();
+    socket.on("message", function(message) {
+        messages = messages.concat(message);
+        updateScroll();
     });
+
     socket.on("user joined", function({message, numUsers}) {
-    	messages = messages.concat(message);
-    	numUsersConnected = numUsers;
-    	updateScroll();
+        messages = messages.concat(message);
+        numUsersConnected = numUsers;
+        updateScroll();
     });
-    socket.on("user left", function (numUsers)  {
-    	numUsersConnected = numUsers;
-    	updateScroll();
+    socket.on("user left", function(numUsers) {
+        numUsersConnected = numUsers;
+        updateScroll();
     });
-
     function emitUserDisconnect() {
-    	socket.emit('user disconnect', name);
+        socket.emit('user disconnect', name);
     }
-
     function handleSubmit() {
-    	message = message.trim();
+        message = message.trim();
 
-    	if (message == '') {
-    		return;
+        if (message == '') {
+            return;
         }
-
-    	let messageString = `${name}: ${message}`;
-
+        let messageString = `${name}: ${message}`;
         if (message.slice(0, 5) == '/nick') {
             let newName = message.slice(6);
             messageString = `Server: ${name} changed their nickname to ${newName}`;
             name = newName;
         }
-
         messages = messages.concat(messageString);
         socket.emit("message", messageString);
-
         updateScroll();
-
         message = "";
-
     }
 
     function updateScroll() {
@@ -194,22 +189,23 @@
     }
 </script>
 
-
-
 <body>
-    <div class="main">
-        <Heading text={'Chatterbox'} />
-        <div id="chatWindow">
-            <ul id="messages">
-                {#each messages as message}
-                    <li transition:fade>{message}</li>
-                {/each}
-            </ul>
-        <form>
-            <input id="m" autocomplete="off" {placeholder} bind:value={message} />
-            <button on:click|preventDefault={handleSubmit}>Send</button>
-        </form>
-        </div>
-        <p id="numUsers">There {numUsersConnected == 1 ? 'is' : 'are'} {numUsersConnected} {numUsersConnected == 1 ? 'user' : 'users'} currently chatting!</p>
+<div class="main">
+    <Heading text={'Chat App'} />
+    <div id="atlarge">
+
+    <div id="chatWindow">
+        <ul id="messages">
+            {#each messages as message}
+                <li transition:fade>{message}</li>
+            {/each}
+        </ul>
     </div>
+    <form action="">
+        <input id="m" autocomplete="off" {placeholder} bind:value={message} />
+        <button on:click|preventDefault={handleSubmit}>Send</button>
+    </form>
+    </div>
+    <p id="numUsers">There {numUsersConnected == 1 ? 'is' : 'are'} {numUsersConnected} {numUsersConnected == 1 ? 'user' : 'users'} currently chatting!</p>
+</div>
 </body>
