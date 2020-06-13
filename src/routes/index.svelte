@@ -8,7 +8,7 @@
     }
     body {
         font: 13px "Noto Sans";
-        background: hsl(227, 100%, 26%);
+        background: hsl(240, 90%, 20%);
     }
     .main {
         display: flex;
@@ -36,9 +36,9 @@
         width: 70%;
         border-radius: 10px;
         background: inherit;
-        color: #00ff6d;
+        color: hsl(146, 100%, 50%);
         font-size: 1.2em;
-        box-shadow: 3px 3px 6px inset #03035c, -3px -3px 6px inset #6baeff;
+        box-shadow: 3px 3px 6px inset hsl(240, 94%, 19%), -3px -3px 6px inset hsla(240, 90%, 71%,.6);
 
     }
     @media screen and (device-aspect-ratio: 375/667) {
@@ -56,13 +56,16 @@
         width: 20%;
         border-radius: 15px;
 
-        box-shadow: 3px 3px 6px  #03035c, -3px -3px 6px  #6baeff;
+        box-shadow: 3px 3px 6px hsl(240, 94%, 10%), -3px -3px 6px hsl(240, 100%, 81%), -2px -2px 3px inset hsl(240, 94%, 15%), 2px 2px 3px inset hsla(240, 90%, 71%,.6);;
     }
     #chatWindow {
         height: 450px;
         width: 80%;
-        box-shadow: -10px -10px 20px hsla(232, 100%, 60%, 0.7), 10px 10px 20px #000a3e, 4px 4px 2px inset hsla(232, 100%, 60%, 0.7),-4px -4px 2px inset #00138a;
-        overflow-y: auto;
+        box-shadow: -10px -10px 20px hsla(240, 100%, 60%, 0.7),
+        10px 10px 20px hsl(240, 100%, 12%),
+        4px 4px 2px inset hsla(240, 100%, 60%, 0.7),
+        -4px -4px 2px inset hsl(240, 100%, 27%);
+        overflow: auto;
 
         padding-top: 15px;
         border-radius: 25px;
@@ -88,21 +91,21 @@
         border-radius: 1em;
         margin: 1.5em 20px 1.5em auto;
         width: 75%;
-        background: hsl(226, 83%, 37%);
+        background: hsl(240, 83%, 37%);
         color: #c1ceff;
         overflow-wrap: break-word;
-        box-shadow: 2px 2px 5px hsla(232, 100%, 60%, 0.7),
-        -2px -2px 5px hsl(230, 100%, 15%),
-        -2px -2px 4px  inset hsla(232, 100%, 60%, 0.7),
-        2px 2px 4px inset  hsl(232, 100%, 15%);
+        box-shadow: 2px 2px 5px hsla(240, 100%, 60%, 0.7),
+        -2px -2px 5px hsl(240, 100%, 15%),
+        -2px -2px 4px  inset hsla(240, 100%, 60%, 0.7),
+        2px 2px 4px inset  hsl(240, 100%, 15%);
     }
     #messages li:nth-child(odd) {
-        box-shadow: 2px 2px 6px inset hsla(232, 100%, 60%, 0.7),
-        -2px -2px 6px inset hsl(232, 100%, 15%),
-        -5px -5px 10px  hsla(232, 100%, 60%, 0.7),
-        5px 5px 10px hsl(232, 100%, 15%);
+        box-shadow: 2px 2px 6px inset hsla(240, 100%, 60%, 0.7),
+        -2px -2px 6px inset hsl(240, 100%, 15%),
+        -5px -5px 10px  hsla(240, 100%, 60%, 0.7),
+        5px 5px 10px hsl(240, 100%, 15%);
 
-        background: hsl(227, 83%, 32%);
+        background: hsl(240, 83%, 32%);
         color: #fff8b8;
 
         margin: 1.5em auto 1.5em 20px;
@@ -131,9 +134,9 @@
     import io from "socket.io-client";
     import { fade } from "svelte/transition";
 
-    const socket = io();
-    const placeholder = "Enter messsage";
-    const greeting = 'You have joined the chat '
+    let socket = io();
+    let placeholder = "Enter messsage";
+    let greeting = 'You have joined the chat '
 
 
     let message = '';
@@ -141,16 +144,16 @@
     let name = "guest";
     let numUsersConnected = 0;
 
-    socket.on("message", (message) => {
+    socket.on("message", function(message)  {
     	messages = messages.concat(message);
     	updateScroll();
     });
-    socket.on("user joined", ({message, numUsers}) => {
+    socket.on("user joined", function({message, numUsers}) {
     	messages = messages.concat(message);
     	numUsersConnected = numUsers;
     	updateScroll();
     });
-    socket.on("user left", (numUsers) => {
+    socket.on("user left", function (numUsers)  {
     	numUsersConnected = numUsers;
     	updateScroll();
     });
@@ -188,7 +191,6 @@
         setTimeout(() => {
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }, 0);
-
     }
 </script>
 
@@ -203,7 +205,7 @@
                     <li transition:fade>{message}</li>
                 {/each}
             </ul>
-        <form action="">
+        <form>
             <input id="m" autocomplete="off" {placeholder} bind:value={message} />
             <button on:click|preventDefault={handleSubmit}>Send</button>
         </form>
