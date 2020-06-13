@@ -94,8 +94,8 @@
         background: hsl(240, 83%, 37%);
         color: #c1ceff;
         overflow-wrap: break-word;
-        box-shadow: 2px 2px 5px hsla(240, 100%, 60%, 0.7),
-        -2px -2px 5px hsl(240, 100%, 15%),
+        box-shadow: 5px 5px 10px hsla(240, 100%, 60%, 0.7),
+        -5px -5px 10px hsl(240, 100%, 15%),
         -2px -2px 4px  inset hsla(240, 100%, 60%, 0.7),
         2px 2px 4px inset  hsl(240, 100%, 15%);
     }
