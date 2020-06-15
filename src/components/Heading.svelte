@@ -2,11 +2,11 @@
     #heading {
         font-family: "Bungee Outline", cursive;
         text-transform: uppercase;
-        font-size: 60px;
+        font-size: 45px;
         font-weight: bold;
-        margin: 0;
+        margin: 0 auto 30px;
         top: 0;
-        left: -6px;
+        text-align: center;
         color: #52ed99;
         mix-blend-mode: screen;
         position: relative;

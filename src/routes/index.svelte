@@ -50,8 +50,10 @@
     }
     @media screen and (device-aspect-ratio: 375/667) {
         form input {
-            font-size: 16px;
+            font-size: 1em;
         }
+
+
     }
     form button {
 
@@ -63,7 +65,21 @@
         width: 20%;
         border-radius: 15px;
         padding: 15px;
+        transition: box-shadow 500ms ease-in;
         box-shadow: 3px 3px 6px hsl(240, 83%, 20%), -3px -3px 6px hsl(240, 83%, 60%), -2px -2px 3px inset hsl(240, 83%, 20%), 2px 2px 3px inset hsla(240, 83%, 60%,.6);;
+    }
+
+    form button:active {
+        box-shadow: 3px 3px 6px inset  hsl(240, 83%, 20%),
+        -3px -3px 6px inset hsl(240, 83%, 60%),
+        -2px -2px 3px inset hsl(240, 83%, 20%),
+        2px 2px 3px inset hsla(240, 83%, 60%,.6);
+        outline: none;
+
+
+    }
+    form button:focus, form button:hover {
+        outline: none;
     }
     #chatWindow {
         height: 450px;
@@ -77,7 +93,7 @@
         scrollbar-track-color: hsl(220, 90%, 60%);
         padding-top: 15px;
         border-radius: 25px;
-        margin: 15px;
+       flex-grow: 1;
     }
     /* width */
     ::-webkit-scrollbar {
@@ -121,7 +137,7 @@
         width: 100%;
     }
     #messages li {
-        padding: 15px 10px;
+        padding: 8px 8px;
         border-radius: 1em;
         margin: 1.5em 20px 1.5em auto;
         width: 75%;
@@ -147,11 +163,7 @@
     ::placeholder {
         color: #b1e6de;
     }
-    #numUsers {
-        color: #fff8b8;
-        padding: 1em;
-        font-size: 14px;
-    }
+
 
 </style>
 <svelte:head>
@@ -242,7 +254,5 @@
             <input id="m" autocomplete="off" {placeholder} bind:value={message} />
             <button on:click|preventDefault={handleSubmit}>Send</button>
         </form>
-
-    <p id="numUsers">There {numUsersConnected == 1 ? 'is' : 'are'} {numUsersConnected} {numUsersConnected == 1 ? 'user' : 'users'} currently chatting!</p>
 </div>
 </body>

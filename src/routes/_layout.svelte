@@ -7,8 +7,11 @@
         padding: 0;
         margin: 0 auto;
         box-sizing: border-box;
-        border-radius: 50px;
+        border-radius: 0px;
+
     }
+
+
 </style>
 
 <main>
